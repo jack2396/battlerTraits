@@ -134,8 +134,8 @@
         if ($dataClasses[this.currentClass().id].meta.Trait) {
             var totalTraits = $dataClasses[this.currentClass().id].meta.Trait.split(", ");
             for (var i = 0; i < totalTraits.length; i++) {
-                if (!this.battleTraits.includes(totalTraits[i]) || stackingTraits.includes(totalTraits[i])) {    
-                    this.battleTraits.push(totalTraits.split(", ")[i]);
+                if ( !this.battleTraits.includes(totalTraits[i]) || stackingTraits.includes(totalTraits[i])) {    
+                    this.battleTraits.push(totalTraits[i]);
                 }
             }
         }
