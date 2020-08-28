@@ -111,8 +111,8 @@
 
         for (var i = 0; i < this.armors().length; i++) {
             armor = this.armors()[i];
-            if (armor && armor.meta.Trait.split(", ")) {
-                for (var i = 0; i < armor.meta.Trait.length; i++) {
+            if (armor && armor.meta.Trait) {
+                for (var i = 0; i < armor.meta.Trait.split(", ").length; i++) {
                     if (!this.battleTraits.includes(armor.meta.Trait[i]) || stackingTraits.includes(totalTraits[i])) {    
                         this.battleTraits.push(armor.meta.Trait[i]);
                     }
@@ -122,8 +122,8 @@
 
         for (var i = 0; i < this.weapons().length; i++) {
             weapon = this.weapons()[i];
-            if (weapon && weapon.meta.Trait.split(", ")) {
-                for (var i = 0; i < weapon.meta.Trait.length; i++) {
+            if (weapon && weapon.meta.Trait) {
+                for (var i = 0; i < weapon.meta.Trait.split(", ").length; i++) {
                     if (!this.battleTraits.includes(weapon.meta.Trait[i]) || stackingTraits.includes(totalTraits[i])) {    
                         this.battleTraits.push(weapon.meta.Trait[i]);
                     }
@@ -192,7 +192,7 @@
 
             for (var i = 0; i < this.armors().length; i++) {
                 armor = this.armors()[i];
-                if (armor.meta.DamageUp_Rate) {
+                if (armor && armor.meta.DamageUp_Rate) {
                     var MatchData = armor.meta.DamageUp_Rate.split(", ");
                     for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
                         this.damageRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
@@ -202,7 +202,7 @@
 
             for (var i = 0; i < this.weapons().length; i++) {
                 weapon = this.weapons()[i];
-                if (weapon && weapon.meta.DamageUp_Rate.split(", ")) {
+                if (weapon && weapon.meta.DamageUp_Rate) {
                     var MatchData = weapon.meta.DamageUp_Rate.split(", ");
                     for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
                         this.damageRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
@@ -298,7 +298,7 @@
 
             for (var i = 0; i < this.armors().length; i++) {
                 armor = this.armors()[i];
-                if (armor.meta.DamageCut_Rate) {
+                if (armor && armor.meta.DamageCut_Rate) {
                     var MatchData = armor.meta.DamageCut_Rate.split(", ");
                     for ( var i = 1; i < (MatchData.length / 2); i++ ) {
                         this.resistanceRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
@@ -308,7 +308,7 @@
 
             for (var i = 0; i < this.weapons().length; i++) {
                 weapon = this.weapons()[i];
-                if (weapon && weapon.meta.DamageCut_Rate.split(", ")) {
+                if (weapon && weapon.meta.DamageCut_Rate) {
                     var MatchData = weapon.meta.DamageCut_Rate.split(", ");
                     for ( var i = 1; i < (MatchData.length / 2); i++ ) {
                         this.resistanceRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
