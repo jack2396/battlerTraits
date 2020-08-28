@@ -114,7 +114,7 @@
             if (armor && armor.meta.Trait) {
                 for (var i = 0; i < armor.meta.Trait.split(", ").length; i++) {
                     if (!this.battleTraits.includes(armor.meta.Trait[i]) || stackingTraits.includes(totalTraits[i])) {    
-                        this.battleTraits.push(armor.meta.Trait[i]);
+                        this.battleTraits.push(armor.meta.Trait.split(", ")[i]);
                     }
                 }
             }
@@ -125,7 +125,7 @@
             if (weapon && weapon.meta.Trait) {
                 for (var i = 0; i < weapon.meta.Trait.split(", ").length; i++) {
                     if (!this.battleTraits.includes(weapon.meta.Trait[i]) || stackingTraits.includes(totalTraits[i])) {    
-                        this.battleTraits.push(weapon.meta.Trait[i]);
+                        this.battleTraits.push(weapon.meta.Trait.split(", ")[i]);
                     }
                 }
             }
@@ -135,7 +135,7 @@
             var totalTraits = $dataClasses[this.currentClass().id].meta.Trait.split(", ");
             for (var i = 0; i < totalTraits.length; i++) {
                 if (!this.battleTraits.includes(totalTraits[i]) || stackingTraits.includes(totalTraits[i])) {    
-                    this.battleTraits.push(totalTraits[i]);
+                    this.battleTraits.push(totalTraits.split(", ")[i]);
                 }
             }
         }
@@ -147,7 +147,7 @@
             var totalTraits = $dataEnemies[this._enemyId].meta.Trait.split(", ");
             for (var i = 0; i < totalTraits.length; i++) {
                 if (!this.battleTraits.includes(totalTraits[i]) || stackingTraits.includes(totalTraits[i])) {
-                    this.battleTraits.push(totalTraits[i]);
+                    this.battleTraits.push(totalTraits.split(", ")[i]);
                 }
             }
         }
@@ -169,9 +169,9 @@
                 }
                 
             } else if (result === "add" && trait) {
-                if (this.battleTraits.includes(trait) || stackingTraits.includes(trait)) {
+                if (!this.battleTraits.includes(trait) || stackingTraits.includes(trait)) {
                     for (k = 0; k < trait.length; k++) {
-                        this.battleTraits.push($dataStates[stateId].meta.Trait[k]);
+                        this.battleTraits.push($dataStates[stateId].meta.Trait.split(", ")[k]);
                     }
                 }
             }
