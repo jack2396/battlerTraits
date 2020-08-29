@@ -145,7 +145,6 @@
                         if (this.battleTraits[k] === trait[i]) {
                             this.battleTraits.splice(k, 1);
                             k = 0;
-                            console.log("A trait just been found!");
                         }
                     }
                 }
@@ -213,14 +212,12 @@
     Game_Battler.prototype.updateDamageRate = function(stateId, result) {
         this.damageRate = this.damageRate || null;
         if (result === "remove" && $dataStates[stateId].meta.DamageUp_Rate) {
-            console.log("It's updating damage rate.");
             var MatchData = $dataStates[stateId].meta.DamageUp_Rate.split(", ");
             for (var k = 0; k < this.damageRate.length; k += 2) {
                 for (var i = 0; i < MatchData.length; i++) {
                     if (this.damageRate[k] && this.damageRate[k][0] === MatchData[i]) {
                         this.damageRate.splice(k, 2);
                         k = 0;
-                        console.log("A damage rate just been found!");
                     }
                 }
             }
@@ -322,16 +319,12 @@
     Game_Battler.prototype.updateResistanceRate = function(stateId, result) {
         this.resistanceRate = this.resistanceRate || null;
         if (result === "remove" && $dataStates[stateId].meta.DamageCut_Rate){
-            console.log("It's removing damage rate.");
             var MatchData = $dataStates[stateId].meta.DamageCut_Rate.split(", ");
-            console.log(MatchData);
-            console.log(MatchData.length);
             for (var k = 0; k < this.resistanceRate.length; k += 2) {
                 for (var i = 0; i < MatchData.length; i++) {
                     if (this.resistanceRate[k] && this.resistanceRate[k][0] === MatchData[i]) {
                         this.resistanceRate.splice(k, 2);
                         k = 0;
-                        console.log(this.resistanceRate);
                     }
                 }
             }
