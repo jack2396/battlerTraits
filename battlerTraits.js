@@ -2,25 +2,6 @@
 // battlerTrait.js
 //=====================================================================================
 /*:
-* @param 克制規則
-* @desc 選擇相性產生克制時的傷害疊加規則。
-* @type select
-* @option 總和（如1.25 & 1.25 → 1.5）。
-* @value 總和
-* @option 相乘（如1.25 × 1.25 → 1.5625）。
-* @value 相乘
-* @default 相乘
-* @param 抵抗規則
-* @desc 選擇相性產生抵抗時的傷害疊加規則。
-* @type select
-* @option 相加（如0.8 & 0.05 → 0.85）。
-* @value 總和
-* @option 相乘（如0.8 × 0.4 → 0.32）。
-* @value 相乘
-* @default 相乘
-* @param 特性疊層
-* @desc 令列表中特性可以疊加（請使用,隔開）。
-* @type text
 *
 * @plugindesc 賦予角色之間特殊的「相性」。
 * @help
@@ -155,19 +136,19 @@
 
 	Game_Battler.prototype.updateStateTrait = function(stateId, result) {
     	this.battleTraits = this.battleTraits || null;
-        if ($dataStates[stateId].meta.Trait){
+        if ($dataStates[stateId].meta.Trait) {
+            var removeList = [];
             var trait = $dataStates[stateId].meta.Trait.split(", ");
             if (result === "remove" && trait){
-                var search = $dataStates[stateId].meta.Trait.split(", ");
-                for (i = 0; i < search.length; i++) {
-                    for (k = 0; k < trait.length; k++) {
-                        var index = this.battleTraits.indexOf(search);
-                        if (index > -1) {
-                            this.battleTraits.splice(index, 1);
+                for (var k = 0; k < this.battleTraits.length; k++) {
+                    for (var i = 0; i < trait.length; i++) {
+                        if (this.battleTraits[k] === trait[i]) {
+                            this.battleTraits.splice(k, 1);
+                            k = 0;
+                            console.log("A trait just been found!");
                         }
                     }
                 }
-                
             } else if (result === "add" && trait) {
                 if (!this.battleTraits.includes(trait) || stackingTraits.includes(trait)) {
                     for (k = 0; k < trait.length; k++) {
@@ -232,12 +213,15 @@
     Game_Battler.prototype.updateDamageRate = function(stateId, result) {
         this.damageRate = this.damageRate || null;
         if (result === "remove" && $dataStates[stateId].meta.DamageUp_Rate) {
-            var search = $dataStates[stateId].meta.DamageUp_Rate;
-            var index = this.damageRate.indexOf(search);
-            if (index > -1) {
-                var MatchData = $dataStates[stateId].meta.DamageUp_Rate.split(", ");
-                for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
-                    this.damageRate.splice(index, 1);
+            console.log("It's updating damage rate.");
+            var MatchData = $dataStates[stateId].meta.DamageUp_Rate.split(", ");
+            for (var k = 0; k < this.damageRate.length; k += 2) {
+                for (var i = 0; i < MatchData.length; i++) {
+                    if (this.damageRate[k] && this.damageRate[k][0] === MatchData[i]) {
+                        this.damageRate.splice(k, 2);
+                        k = 0;
+                        console.log("A damage rate just been found!");
+                    }
                 }
             }
         } else if (result === "add" && $dataStates[stateId].meta.DamageUp_Rate){
@@ -272,7 +256,7 @@
                 }
                 for (var k = 0; k < action.damageRate.length; k++) {
                     for (var x = 0; x < target.battleTraits.length; x++) {
-                        if (action.damageRate[k][0] == target.battleTraits[x]) {
+                        if (action.damageRate[k] == target.battleTraits[x]) {
                             damageRate *= Number(action.damageRate[k][1]);
                         }
                     }
@@ -338,18 +322,24 @@
     Game_Battler.prototype.updateResistanceRate = function(stateId, result) {
         this.resistanceRate = this.resistanceRate || null;
         if (result === "remove" && $dataStates[stateId].meta.DamageCut_Rate){
-            var search = $dataStates[stateId].meta.DamageCut_Rate;
-            var index = this.resistanceRate.indexOf(search);
-            if (index > -1) {
-                var MatchData = $dataStates[stateId].meta.DamageCut_Rate.split(", ");
-                for ( var i = 1; i < (MatchData.length / 2) - 1; i++ ) {
-                    this.resistanceRate.splice(index, 1);
+            console.log("It's removing damage rate.");
+            var MatchData = $dataStates[stateId].meta.DamageCut_Rate.split(", ");
+            console.log(MatchData);
+            console.log(MatchData.length);
+            for (var k = 0; k < this.resistanceRate.length; k += 2) {
+                for (var i = 0; i < MatchData.length; i++) {
+                    if (this.resistanceRate[k] && this.resistanceRate[k][0] === MatchData[i]) {
+                        this.resistanceRate.splice(k, 2);
+                        k = 0;
+                        console.log(this.resistanceRate);
+                    }
                 }
             }
         } else if (result === "add" && $dataStates[stateId].meta.DamageCut_Rate){
             var MatchData = $dataStates[stateId].meta.DamageCut_Rate.split(", ");
-            for ( var i = 0; i < (MatchData.length / 2) - 1; i++ ) {
-                this.resistanceRate[i] = [ MatchData[ 2 * (i + 1)  - 2], MatchData[1 + 2 * (i)] ];
+            for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
+                this.resistanceRate.push([MatchData[ 2 * i - 2 ], MatchData[ 2 * i - 1 ] ]);
+                
             }
         }
     };
