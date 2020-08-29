@@ -64,9 +64,9 @@
 //=============================================================================
 
     const jackBT_onBattleStart = Game_Battler.prototype.onBattleStart;
-	const jackBT_stateTraitAdd = Game_Battler.prototype.addState;
-	const jackBT_stateTraitRemove = Game_Battler.prototype.removeState;
-	const jackBT_damageCalc = Game_Action.prototype.executeDamage;
+    const jackBT_stateTraitAdd = Game_Battler.prototype.addState;
+    const jackBT_stateTraitRemove = Game_Battler.prototype.removeState;
+    const jackBT_damageCalc = Game_Action.prototype.executeDamage;
 
 //=============================================================================
 // Core Area
@@ -98,7 +98,7 @@
 //=============================================================================
 
     Game_Actor.prototype.setBattleTrait = function() {
-    	this.battleTraits = [] || null;
+        this.battleTraits = [] || null;
         if ($dataActors[this._actorId].meta.Trait) {
             var totalTraits = $dataActors[this._actorId].meta.Trait.split(", ");
             for (var i = 0; i < totalTraits.length; i++) {
@@ -141,19 +141,19 @@
     };
 
     Game_Enemy.prototype.setBattleTrait = function() {
-    	this.battleTraits = [] || null;
+        this.battleTraits = [] || null;
         if ($dataEnemies[this._enemyId].meta.Trait){
             var totalTraits = $dataEnemies[this._enemyId].meta.Trait.split(", ");
             for (var i = 0; i < totalTraits.length; i++) {
                 if (!this.battleTraits.includes(totalTraits[i]) || stackingTraits.includes(totalTraits[i])) {
-                    this.battleTraits.push(totalTraits.split(", ")[i]);
+                    this.battleTraits.push(totalTraits[i]);
                 }
             }
         }
     };
 
-	Game_Battler.prototype.updateStateTrait = function(stateId, result) {
-    	this.battleTraits = this.battleTraits || null;
+    Game_Battler.prototype.updateStateTrait = function(stateId, result) {
+        this.battleTraits = this.battleTraits || null;
         if ($dataStates[stateId].meta.Trait) {
             var removeList = [];
             var trait = $dataStates[stateId].meta.Trait.split(", ");
@@ -253,8 +253,8 @@
         if (userDamageUpList.length) {
             for (var k = 0; k < userDamageUpList.length; k++) {
                     for (var i = 0; i < target.battleTraits.length; i++) {
-                    var traitDetect = target.battleTraits[i];
-                    if (userDamageUpList[k] == traitDetect[i]) {
+                    var traitDetect = target.battleTraits;
+                    if (userDamageUpList[k][0] == traitDetect[i]) {
                         damageRate *= Number(userDamageUpList[k][1]);
                     }
                 }
@@ -263,7 +263,6 @@
         if (action._item.itemId() && action.isSkill()){
             var skillRate = $dataSkills[action._item.itemId()].meta.DamageUp_Rate || 0;
             action.damageRate = [] || 0;
-
             if (skillRate) {
                 var MatchData = skillRate.split(", ");
                 for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
@@ -271,7 +270,7 @@
                 }
                 for (var k = 0; k < action.damageRate.length; k++) {
                     for (var x = 0; x < target.battleTraits.length; x++) {
-                        if (action.damageRate[k] == target.battleTraits[x]) {
+                        if (action.damageRate[k][0] == target.battleTraits[x]) {
                             damageRate *= Number(action.damageRate[k][1]);
                         }
                     }
@@ -291,7 +290,7 @@
         this.resistanceRate = [] || null;
         if ($dataActors[this._actorId].meta.DamageCut_Rate) {
             var MatchData = $dataActors[this._actorId].meta.DamageCut_Rate.split(", ");
-            for ( var i = 1; i < (MatchData.length / 2); i++ ) {
+            for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
                 this.resistanceRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
             }
 
@@ -299,7 +298,7 @@
                 armor = this.armors()[i];
                 if (armor && armor.meta.DamageCut_Rate) {
                     var MatchData = armor.meta.DamageCut_Rate.split(", ");
-                    for ( var i = 1; i < (MatchData.length / 2); i++ ) {
+                    for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
                         this.resistanceRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
                     }
                 }
@@ -309,7 +308,7 @@
                 weapon = this.weapons()[i];
                 if (weapon && weapon.meta.DamageCut_Rate) {
                     var MatchData = weapon.meta.DamageCut_Rate.split(", ");
-                    for ( var i = 1; i < (MatchData.length / 2); i++ ) {
+                    for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
                         this.resistanceRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
                     }
                 }
@@ -358,21 +357,23 @@
     function resistanceRateClac(action, target) {
         var resistanceRate = 1;
         var userDamageCutList = target.resistanceRate;
-        if (userDamageCutList.length) {
+        if (userDamageCutList) {
             if (action._subjectActorId) {
-                for (var k = 0; k < userDamageCutList.length - 1; k++) {
+                for (var k = 0; k < userDamageCutList.length; k++) {
                     for (var i = 0; i < $dataActors[action._subjectActorId].meta.Trait.split(", ").length; i++) {
                         var traitDetect = $dataActors[action._subjectActorId].meta.Trait.split(", ");
-                        if (userDamageCutList[k] == (traitDetect[i])) {
+                        if (userDamageCutList[k][0] == (traitDetect[i])) {
                             resistanceRate *= Number(userDamageCutList[k][1]);
                         }
                     }
                 }
-            } else if (action._subjectEnemyIndex) {
-                for (var k = 0; k < userDamageCutList.length - 1; k++) {
-                    for (var i = 0; i < $dataEnemies[action._subjectEnemyIndex].meta.Trait.split(", ").length; i++) {
-                        var traitDetect = $dataEnemies[action._subjectEnemyIndex].meta.Trait.split(", ");
-                        if (userDamageCutList[k] == (traitDetect[i])) {
+            } else if (action._subjectEnemyIndex != -1) {
+                console.log();
+                for (var k = 0; k < userDamageCutList.length; k++) {
+                    var userEnemyId = $gameTroop._enemies[action._subjectEnemyIndex]._enemyId;
+                    for (var i = 0; i < $dataEnemies[userEnemyId].meta.Trait.split(", ").length; i++) {
+                        var traitDetect = $dataEnemies[userEnemyId].meta.Trait.split(", ");
+                        if (userDamageCutList[k][0] == (traitDetect[i])) {
                             resistanceRate *= Number(userDamageCutList[k][1]);
                         }
                     }
