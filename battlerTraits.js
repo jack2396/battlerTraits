@@ -209,7 +209,7 @@
             }
 
             if ($dataClasses[this.currentClass().id].meta.DamageUp_Rate) {
-                var totalIncrease = $dataClasses[this.currentClass.id].meta.DamageUp_Rate.split(", ");
+                var totalIncrease = $dataClasses[this.currentClass().id].meta.DamageUp_Rate.split(", ");
                 for ( var i = 1; i < (totalIncrease.length / 2) + 1; i++ ) {
                     this.damageRate[i-1] = [MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]];
                 }
@@ -324,7 +324,7 @@
             }
 
             if ($dataClasses[this.currentClass().id].meta.DamageCut_Rate) {
-                var totalIncrease = $dataClasses[this.currentClass.id].meta.DamageCut_Rate.split(", ");
+                var totalIncrease = $dataClasses[this.currentClass().id].meta.DamageCut_Rate.split(", ");
                 for ( var i = 1; i < (MatchData.length / 2) + 1; i++ ) {
                     this.resistanceRate.push([MatchData[ 2 * i - 2], MatchData[1 + 2 * (i - 1)]]);
                 }
