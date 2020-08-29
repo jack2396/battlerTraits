@@ -381,16 +381,17 @@
                     }
                 }
             } else if (action._subjectEnemyIndex != -1) {
-                console.log();
                 for (var k = 0; k < userDamageCutList.length; k++) {
                     var userEnemyId = $gameTroop._enemies[action._subjectEnemyIndex]._enemyId;
-                    for (var i = 0; i < $dataEnemies[userEnemyId].meta.Trait.split(", ").length; i++) {
-                        var traitDetect = $dataEnemies[userEnemyId].meta.Trait.split(", ");
-                        if (userDamageCutList[k][0] == (traitDetect[i])) {
-                            if (decreaseRule == "相乘") {
-                                resistanceRate *= userDamageCutList[k][1];
-                            } else if (decreaseRule == "相加") {
-                                resistanceRate += userDamageCutList[k][1];
+                    if ($dataEnemies[userEnemyId].meta.Trait) {
+                            for (var i = 0; i < $dataEnemies[userEnemyId].meta.Trait.split(", ").length; i++) {
+                            var traitDetect = $dataEnemies[userEnemyId].meta.Trait.split(", ");
+                            if (userDamageCutList[k][0] == (traitDetect[i])) {
+                                if (decreaseRule == "相乘") {
+                                    resistanceRate *= userDamageCutList[k][1];
+                                } else if (decreaseRule == "相加") {
+                                    resistanceRate += userDamageCutList[k][1];
+                                }
                             }
                         }
                     }
