@@ -371,7 +371,7 @@ function resistanceRateClac(action, target) {
                         if (userDamageCutList[k][0] == (traitDetect[i])) {
                             if (decreaseRule == "相乘") {
                                 resistanceRate *= userDamageCutList[k][1];
-                            } else if (decreaseRule == "相加") {
+                            } else if (decreaseRule == "總和") {
                                 resistanceRate += userDamageCutList[k][1];
                             }
                         }
@@ -387,7 +387,7 @@ function resistanceRateClac(action, target) {
                         if (userDamageCutList[k][0] == (traitDetect[i])) {
                             if (decreaseRule == "相乘") {
                                 resistanceRate *= userDamageCutList[k][1];
-                            } else if (decreaseRule == "相加") {
+                            } else if (decreaseRule == "總和") {
                                 resistanceRate += userDamageCutList[k][1];
                             }
                         }
