@@ -248,7 +248,7 @@ Game_Battler.prototype.updateDamageRate = function(stateId, result) {
 function damageRateClac(action, target) {
     var damageRate = 1;
     var userDamageUpList = action.subject().damageRate;
-    if (userDamageUpList.length) {
+    if (userDamageUpList) {
         for (var k = 0; k < userDamageUpList.length; k++) {
             for (var i = 0; i < target.battleTraits.length; i++) {
                 var traitDetect = target.battleTraits;
