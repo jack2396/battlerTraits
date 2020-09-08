@@ -239,8 +239,8 @@ Game_Battler.prototype.updateDamageRate = function(stateId, result) {
         }
     } else if (result === "add" && $dataStates[stateId].meta.DamageUp_Rate) {
         var MatchData = $dataStates[stateId].meta.DamageUp_Rate.split(", ");
-        for (var i = 1; i < (MatchData.length / 2) + 1; i++) {
-            this.damageRate.push([MatchData[2 * i - 2], MatchData[1 + 2 * (i - 1)]]);
+        for (var i = 0; i < (MatchData.length / 2); i+=2) {
+            this.damageRate.push([MatchData[i], MatchData[i+1]]);
         }
     }
 };
@@ -254,31 +254,32 @@ function damageRateClac(action, target) {
                 var traitDetect = target.battleTraits;
                 if (userDamageUpList[k][0] == traitDetect[i]) {
                     if (decreaseRule == "相乘") {
-                        damageRate *= userDamageUpList[k][1];
+                        damageRate *= Number(userDamageUpList[k][1]);
                     } else if (decreaseRule == "相加") {
-                        damageRate += userDamageUpList[k][1];
+                        damageRate += Number(userDamageUpList[k][1]);
                     }
                 }
             }
         }
     }
-    if (action._item.itemId() && action.isSkill()) {
+    if (action._item.itemId() && action.isSkill() && userDamageUpList) {
         var skillRate = $dataSkills[action._item.itemId()].meta.DamageUp_Rate || 0;
         action.damageRate = [] || 0;
         if (skillRate) {
             var MatchData = skillRate.split(", ");
-            for (var i = 1; i < (MatchData.length / 2) + 1; i++) {
-                action.damageRate.push([MatchData[2 * i - 2], MatchData[1 + 2 * i - 2]]);
+            for (var i = 0; i < (MatchData.length / 2); i+=2) {
+                action.damageRate.push([MatchData[i], MatchData[i + 1]]);
             }
             if (action.damageRate) {
             	for (var k = 0; k < action.damageRate.length; k++) {
             		if (target.battleTraits) {
                 		for (var x = 0; x < target.battleTraits.length; x++) {
-                    		if (action.damageRate[k][0] == target.battleTraits[x]) {
+                    		if (action.damageRate[k][0].includes(target.battleTraits[x])) {
+                    			console.log(damageRate);
                         		if (decreaseRule == "相乘") {
-                            		damageRate *= userDamageUpList[k][1];
-                        		} else if (decreaseRule == "相加") {
-                        	    	damageRate += userDamageUpList[k][1];
+                            		damageRate *= Number(action.damageRate[k][1]);
+                        		} else if (decreaseRule == "總和") {
+                        	    	damageRate += Number(action.damageRate[k][1]);
                         		}
                     		}
                 		}
@@ -390,9 +391,9 @@ function resistanceRateClac(action, target) {
                         var traitDetect = $dataEnemies[userEnemyId].meta.Trait.split(", ");
                         if (userDamageCutList[k][0] == (traitDetect[i])) {
                             if (decreaseRule == "相乘") {
-                                resistanceRate *= userDamageCutList[k][1];
+                                resistanceRate *= Number(userDamageCutList[k][1]);
                             } else if (decreaseRule == "總和") {
-                                resistanceRate += userDamageCutList[k][1];
+                                resistanceRate += Number(userDamageCutList[k][1]);
                             }
                         }
                     }
