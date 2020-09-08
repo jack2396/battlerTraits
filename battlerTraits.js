@@ -270,16 +270,18 @@ function damageRateClac(action, target) {
             for (var i = 1; i < (MatchData.length / 2) + 1; i++) {
                 action.damageRate.push([MatchData[2 * i - 2], MatchData[1 + 2 * i - 2]]);
             }
-            for (var k = 0; k < action.damageRate.length; k++) {
-                for (var x = 0; x < target.battleTraits.length; x++) {
-                    if (action.damageRate[k][0] == target.battleTraits[x]) {
-                        if (decreaseRule == "相乘") {
-                            damageRate *= userDamageUpList[k][1];
-                        } else if (decreaseRule == "相加") {
-                            damageRate += userDamageUpList[k][1];
-                        }
-                    }
-                }
+            if (action.damageRate) {
+            	for (var k = 0; k < action.damageRate.length; k++) {
+                	for (var x = 0; x < target.battleTraits.length; x++) {
+                    	if (action.damageRate[k][0] == target.battleTraits[x]) {
+                        	if (decreaseRule == "相乘") {
+                            	damageRate *= userDamageUpList[k][1];
+                        	} else if (decreaseRule == "相加") {
+                        	    damageRate += userDamageUpList[k][1];
+                        	}
+                    	}
+                	}
+            	}
             }
         }
     }
