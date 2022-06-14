@@ -183,7 +183,7 @@ Game_Actor.prototype.setDamageRate = function() {
     this.damageRate = [] || null;
     if ($dataActors[this._actorId].meta.DamageUp_Rate) {
         var MatchData = $dataActors[this._actorId].meta.DamageUp_Rate.split(", ");
-        for (var i = 1; i < (MatchData.length / 2) + 1; i++) {
+        for (var i = 0; i < (MatchData.length / 2) + 1; i+=2) {
             this.damageRate.push([MatchData[i], MatchData[i + 1]]);
         }
     }
@@ -208,7 +208,7 @@ Game_Actor.prototype.setDamageRate = function() {
         }
     }
     if ($dataClasses[this.currentClass().id].meta.DamageUp_Rate) {
-        var totalIncrease = $dataClasses[this.currentClass().id].meta.DamageUp_Rate.split(", ");
+        var MatchData = $dataClasses[this.currentClass().id].meta.DamageUp_Rate.split(", ");
         for (var i = 0; i < (MatchData.length / 2) + 1; i+=2) {
             this.damageRate.push([MatchData[i], MatchData[i + 1]]);
         }
@@ -271,20 +271,20 @@ function damageRateClac(action, target) {
                 action.damageRate.push([MatchData[i], MatchData[i + 1]]);
             }
             if (action.damageRate) {
-            	for (var k = 0; k < action.damageRate.length; k++) {
-            		if (target.battleTraits) {
-                		for (var x = 0; x < target.battleTraits.length; x++) {
-                    		if (action.damageRate[k][0].includes(target.battleTraits[x])) {
-                    			console.log(damageRate);
-                        		if (decreaseRule == "相乘") {
-                            		damageRate *= Number(action.damageRate[k][1]);
-                        		} else if (decreaseRule == "總和") {
-                        	    	damageRate += Number(action.damageRate[k][1]);
-                        		}
-                    		}
-                		}
-                	}
-            	}
+                for (var k = 0; k < action.damageRate.length; k++) {
+                    if (target.battleTraits) {
+                        for (var x = 0; x < target.battleTraits.length; x++) {
+                            if (action.damageRate[k][0].includes(target.battleTraits[x])) {
+                                console.log(damageRate);
+                                if (decreaseRule == "相乘") {
+                                    damageRate *= Number(action.damageRate[k][1]);
+                                } else if (decreaseRule == "總和") {
+                                    damageRate += Number(action.damageRate[k][1]);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -310,8 +310,8 @@ Game_Actor.prototype.setResistanceRate = function() {
         if (armor && armor.meta.DamageCut_Rate) {
             var MatchData = armor.meta.DamageCut_Rate.split(", ");
             for (var i = 0; i < (MatchData.length / 2) + 1; i+=2) {
-            	this.resistanceRate.push([MatchData[i], MatchData[i + 1]]);
-        	}
+                this.resistanceRate.push([MatchData[i], MatchData[i + 1]]);
+            }
         }
     }
 
@@ -320,8 +320,8 @@ Game_Actor.prototype.setResistanceRate = function() {
         if (weapon && weapon.meta.DamageCut_Rate) {
             var MatchData = weapon.meta.DamageCut_Rate.split(", ");
             for (var i = 0; i < (MatchData.length / 2) + 1; i+=2) {
-            	this.resistanceRate.push([MatchData[i], MatchData[i + 1]]);
-        	}
+                this.resistanceRate.push([MatchData[i], MatchData[i + 1]]);
+            }
         }
     }
 
